@@ -2,7 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 import json
 from bs4 import Tag
-
+quotes = []  
+authors = []  
 url = 'http://quotes.toscrape.com/' 
 response = requests.get(url)  
 if response.status_code != 200:
@@ -15,25 +16,22 @@ quote_elements = soup.find_all('div', class_='quote')
 
 print(f"Найдено: {len(quote_elements)} цитат")  
 
-list_quotes = []  
-list_authors = []  
-
 for quote in quote_elements:  
     text = quote.select_one('.text').get_text(strip=True)
-    list_quotes.append(text)
+    quotes.append(text)
 
     author = quote.select_one('.author').get_text(strip=True)
-    list_authors.append(author)
+    authors.append(author)
 
-for i in range(len(list_quotes)): 
-    print(f"{i + 1}. Quote: {list_quotes[i]}; Author: {list_authors[i]};")
+for i in range(len(quotes)): 
+    print(f"{i + 1}. Quote: {quotes[i]}; Author: {authors[i]};")
 
 
 file_json = "data.json"
 writer_list = []
 
-for i in range(len(list_quotes)):
-    writer = {'Quote': list_quotes[i], 'Author': list_authors[i]}
+for i in range(len(quotes)):
+    writer = {'Quote': quotes[i], 'Author': authors[i]}
     writer_list.append(writer)
 
 print("Записываем данные в файл data.json")
